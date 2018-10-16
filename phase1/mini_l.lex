@@ -158,8 +158,8 @@ QUESTION_MARK "?"
 	currPos += yyleng;
 }
 
-
 [ ]  {
+	/*this is a space*/
 	currPos += yyleng;
 }
 
@@ -326,22 +326,23 @@ QUESTION_MARK "?"
 }
 
 
-
 [0-9|_][a-zA-Z0-9|_]*[a-zA-Z0-9|_] {
+	/* error if the identifer starts with a digit or an underscore */
+	currPos += yyleng;
 	printf("Error at line %d, column %d: Identifier \"%s\" must begin with a letter\n",currLine,currPos,yytext);
-	currPos += strlen(yytext);
 	exit(0);
 }
 [a-zA-Z][a-zA-Z0-9|_]*[_] {
+	/* error if an identifier ends with an underscore */
+	currPos += yyleng;
 	printf("Error at line %d, column %d: Identifier \"%s\" cannot end with an underscore\n",currLine,currPos,yytext);
-	currPos += strlen(yytext);
 	exit(0);
 }
 
 {IDENTIFIER} {
+	currPos += yyleng;
 	printf("IDENT %s\n", yytext);
 }
-
 
 . {
 	printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", currLine, currPos, yytext);
